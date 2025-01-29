@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - checkout</title>
+    <link rel="stylesheet" href="STYLE.CSS">
+</head>
+<body>
+    <div class="header"> <h1>Checkout</h1></div>
+
+    <form action="https://www.payfast.co.za/eng/process" method="post" name="payfast_form" id="payfast_form">
+        <input type="hidden" name="merchant_id" value="26819851">
+        <input type="hidden" name="merchant_key" value="hzm7rz5whswuy">
+        <input type="hidden" name="return_url" value="https://yourwebsite.com/order-confirmation">
+        <input type="hidden" name="cancel_url" value="https://yourwebsite.com/cancelled">
+        <input type="hidden" name="notify_url" value="https://yourwebsite.com/payment-notification">
+        <center>
+        <h2>Payment Details</h2>
+    </center>
+        <label for="item_name">Items:</label>
+        <textarea id="item_name" name="item_name" rows="4" readonly required></textarea>
+
+        <label for="amount">Amount (ZAR):</label>
+        <input type="text" id="amount" name="amount" required readonly>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <button type="submit">Pay with PayFast</button>
+    </form>
+
+    <script>
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let total = 0;
+            let itemList = [];
+
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                itemList.push(`${item.quantity} x ${item.name} (Size: ${item.size}, Color: ${item.color})`);
+            });
+
+            document.getElementById('item_name').value = itemList.join("\n");
+            document.getElementById('amount').value = total.toFixed(2);
+        }
+
+        loadCart();
+    </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>APPAREL</title>
+    <link rel="stylesheet" href="STYLE.CSS">
+    <link rel="shortcut icon" href="LOGO1.jpg" type="image/x-icon">
+
+    <script>
+        function toggleCart(event) {
+            event.preventDefault();
+            let cartContainer = document.getElementById("cart-container");
+            let overlay = document.getElementById("cart-overlay");
+            let isVisible = cartContainer.style.display === "block";
+            cartContainer.style.display = isVisible ? "none" : "block";
+            overlay.style.display = isVisible ? "none" : "block";
+            showCart();
+        }
+
+        function addToCart(productName, price, sizeOptionName, colorOptionName, quantityInputId) {
+            let sizes = document.getElementsByName(sizeOptionName);
+            let colors = document.getElementsByName(colorOptionName);
+            let selectedSize = "";
+            let selectedColor = "";
+            let quantity = parseInt(document.getElementById(quantityInputId).value);
+
+            for (let i = 0; i < sizes.length; i++) {
+                if (sizes[i].checked) {
+                    selectedSize = sizes[i].value;
+                    break;
+                }
+            }
+            for (let i = 0; i < colors.length; i++) {
+                if (colors[i].checked) {
+                    selectedColor = colors[i].value;
+                    break;
+                }
+            }
+            if (selectedSize === "" || selectedColor === "" || quantity <= 0) {
+                alert("Please select a size, color, and quantity before adding to cart!");
+                return;
+            }
+            let cartItem = { name: productName, price: price, size: selectedSize, color: selectedColor, quantity: quantity };
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.push(cartItem);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert(`Added ${quantity} x ${productName} (Size: ${selectedSize}, Color: ${selectedColor}) to cart!`);
+            showCart();
+        }
+
+        function showCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let cartDisplay = document.getElementById("cart-content");
+            cartDisplay.innerHTML = '<button class="close-cart" onclick="toggleCart(event)">X</button><h3>Shopping Cart</h3>';
+            
+            if (cart.length === 0) {
+                cartDisplay.innerHTML += "<p>Your cart is empty.</p>";
+            } else {
+                let total = 0; // Initialize total
+                cart.forEach((item, index) => {
+                    total += item.price * item.quantity; // Calculate total
+                    cartDisplay.innerHTML += `<p>${item.quantity} x ${item.name} - Size: ${item.size}, Color: ${item.color} - R${item.price} 
+                        <button class="cart-remove" onclick="removeFromCart(${index})">X</button></p>`;
+                });
+                cartDisplay.innerHTML += `<p><strong>Total: R${total.toFixed(2)}</strong></p>`; // Display total
+                cartDisplay.innerHTML += '<button class="checkout-button" onclick="checkout()">Proceed to Checkout</button>';
+            }
+        }
+
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            showCart();
+        }
+
+        function checkout() {
+            window.location.href = "checkout.html";
+        }
+    </script>
+</head>
+<body onload="showCart()">
+    <div class="header">
+        <h1>APPAREL.</h1>
+    </div>
+    <center>
+        <h2>NATURE'S MONOCHROME MARVELS</h2>
+        <nav class="navigation">
+            <a href="index.html" class="homepage">HOMEPAGE</a>
+            <a href="ABOUT US.html" class="about">ABOUT US</a>
+            <a href="CONTACT US.html" class="contact">CONTACT US</a>
+            <a href="NEWS.html" class="news">NEWS</a>
+            <button class="cart-button" onclick="toggleCart(event)">
+                <img src="shopping-cart_8585635 (1).png" alt="Cart"> View Cart
+            </button>
+        </nav>
+        <img src="LOGO1.jpg" alt="LOGO">
+    </center>
+    <div id="cart-overlay" class="cart-overlay" onclick="toggleCart(event)"></div>
+    <div id="cart-container">
+        <div id="cart-content"></div>
+    </div>
+    <center>
+        <h3>HOODIES</h3> 
+        
+        <img src="WHWBL.jpg" alt="mockups">
+        <img src="WHWSL.jpg" alt="mockups">
+        <img src="WHWPB.jpg" alt="mockups">
+        <p><strong>Price: R 400.00</strong></p>
+        <p>Select Size:</p>
+        <label><input type="radio" name="hoodie1-size" value="S"> Small (S)</label>
+        <label><input type="radio" name="hoodie1-size" value="M"> Medium (M)</label>
+        <label><input type="radio" name="hoodie1-size" value="L"> Large (L)</label>
+        <label><input type="radio" name="hoodie1-size" value="XL"> Extra Large (XL)</label>
+        <p>Select Color:</p>
+        <label><input type="radio" name="hoodie1-color" value="Black"> Black</label>
+        <label><input type="radio" name="hoodie1-color" value="White"> White</label>
+        <br>
+        <label for="hoodie1-quantity">Quantity:</label>
+        <input type="number" id="hoodie1-quantity" class="quantity-input" value="1" min="1">
+        <br>
+        <button onclick="addToCart('Hoodie', 400, 'hoodie1-size', 'hoodie1-color', 'hoodie1-quantity')">Add to Cart</button>
+  
+    </center>
+    
+    <center>
+        <h3>T-Shirts</h3>
+        <img src="BTWBL.jpg" alt="mockup">
+        <img src="BTWSL.png" alt="mockup">
+        <img src="BTWLB.jpg" alt="mockup">
+        <p><strong>Price: R300.00</strong></p>
+        <p>Select Size:</p>
+        <label><input type="radio" name="tshirt1-size" value="S"> Small (S)</label>
+        <label><input type="radio" name="tshirt1-size" value="M"> Medium (M)</label>
+        <label><input type="radio" name="tshirt1-size" value="L"> Large (L)</label>
+        <label><input type="radio" name="tshirt1-size" value="XL"> Extra Large (XL)</label>
+        <p>Select Color:</p>
+        <label><input type="radio" name="tshirt1-color" value="Black"> Black</label>
+        <label><input type="radio" name="tshirt1-color" value="White"> White</label>
+        <br>
+        <label for="tshirt1-quantity">Quantity:</label>
+        <input type="number" id="tshirt1-quantity" class="quantity-input" value="1" min="1">
+        <br>
+        <button onclick="addToCart('T-Shirt', 300, 'tshirt1-size', 'tshirt1-color', 'tshirt1-quantity')">Add to Cart</button>
+    </center>
+    
+    <center>
+        <h3>CAPS</h3>
+        <img src="BC.jpg" alt="mockup">
+        <img src="WC.jpg" alt="mockup">
+        <p><strong>Price: R100.00</strong></p>
+        <p>Select Color:</p>
+        <label><input type="radio" name="cap1-color" value="Black"> Black</label>
+        <label><input type="radio" name="cap1-color" value="White"> White</label>
+        <br>
+        <label for="cap1-quantity">Quantity:</label>
+        <input type="number" id="cap1-quantity" class="quantity-input" value="1" min="1">
+        <br>
+        <button onclick="addToCart('Cap', 100, 'cap1-color', '', 'cap1-quantity')">Add to Cart</button>
+    </center>
+    <footer class="wapanda-footer">
+        <div class="footer-section">
+            <h4>Follow Us</h4>
+            <a href="https://www.facebook.com/profile.php?id=61550855362649"><img src="facebook.png" alt="Facebook"></a>
+            <a href="https://www.instagram.com/wapanda08.28/?__pwa=1#"><img src="instagram.png" alt="Instagram"></a>
+            <a href="https://www.tiktok.com/@wapanda_08.28?_t=8pFGoP0lOuk&_r=1"><img src="tik-tok.png" alt="TIK TOK"></a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Wapanda. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

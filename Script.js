@@ -1,0 +1,1 @@
+let cartItem = { name: productName, price: price, size: selectedSize, color: selectedColor, quantity: quantity };
